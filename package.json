@@ -1,7 +1,7 @@
 {
-  "name": "generator-node-maven-style",
+  "name": "generator-nest-fastify",
   "version": "1.0.0",
-  "description": "Generador mínimo funcional para NestJS estilo Maven",
+  "description": "Generador mínimo funcional Nest usando Fastify",
   "main": "generators/app/index.js",
   "scripts": {
     "start": "yo ./generators/app",

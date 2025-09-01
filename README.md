@@ -9,7 +9,10 @@ Este demo genera una estructura profesional de microservicio usando NestJS y Fas
 ---
 
 
+
 ## **1. Instalación previa del proyecto**
+
+> **Nota:** Antes de cualquier paso, asegúrate de tener instalado [Node.js](https://nodejs.org/) (versión 18.x o superior). Puedes descargarlo desde la web oficial. Esto instalará también npm, el gestor de paquetes de Node.js.
 
 Antes de comenzar, asegúrate de tener instalado:
 - Node.js 18.x o superior

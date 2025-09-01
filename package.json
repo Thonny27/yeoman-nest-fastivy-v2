@@ -1,5 +1,5 @@
 {
-  "name": "generator-nest-fastify",
+  "name": "generator-ads-microservice-template-nodejs",
   "version": "1.0.0",
   "description": "Generador mínimo funcional Nest usando Fastify",
   "main": "generators/app/index.js",

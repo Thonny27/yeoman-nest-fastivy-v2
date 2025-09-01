@@ -8,11 +8,15 @@ import {
 } from '@nestjs/common';
 import { OAuthService } from '../../../common/oauth/oauth.service';
 import axios from 'axios';
-import { CircuitBreakerService } from '../../../common/circuit-breaker/circuit-breaker.service';
+import { HttpClient } from 'ads-commons-httpclient-nodejs-lib';
 
 @Controller('oauth')
 export class OAuthController {
-  constructor(private readonly oauthService: OAuthService,private readonly circuitBreaker: CircuitBreakerService) {}
+  private readonly httpClient: HttpClient;
+
+  constructor(private readonly oauthService: OAuthService) {
+    this.httpClient = new HttpClient();
+  }
 
   // 👉 GET simple para ver el token generado
   @Get('token')
@@ -57,16 +61,12 @@ export class OAuthController {
     try {
       const token = await this.oauthService.getAccessToken();
 
-      const response = await axios.post(
-        'https://httpbin.org/anything',
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+      const response = await axios.post('https://httpbin.org/anything', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-      );
+      });
 
       return {
         message: 'POST a API externa con token exitoso ✅',
@@ -87,19 +87,29 @@ export class OAuthController {
     }
   }
 
+  // 👉 GET para consumir API externa usando HttpClient resiliente
   @Get('test-api-call-with-circuit')
-async callWithBreaker() {
-  const token = await this.oauthService.getAccessToken();
-
-  const response = await this.circuitBreaker.get('https://httpbin.org/anything', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return {
-    message: 'Llamada con Circuit Breaker ✅',
-    response: response.data ?? response,
-  };
-}
+  async callWithBreaker() {
+    const token = await this.oauthService.getAccessToken();
+    try {
+      const response = await this.httpClient.get(
+        'https://httpbin.org/anything',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      // El HttpClient de la librería retorna { data } como en safeRequest
+      return {
+        message: 'Llamada con HttpClient resiliente ✅',
+        response: response.data ?? response,
+      };
+    } catch (error) {
+      return {
+        message: 'Error al llamar con HttpClient resiliente',
+        error: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
 }

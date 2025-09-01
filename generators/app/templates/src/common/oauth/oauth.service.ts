@@ -16,13 +16,13 @@ export class OAuthService {
     const clientId = this.config.get<string>('oauth.clientId');
     const clientSecret = this.config.get<string>('oauth.clientSecret');
 
-    console.log(' Intentando obtener token...');
-    console.log(' URL:', url);
-    console.log(' Client ID:', clientId);
-    console.log(' Client Secret:', clientSecret);
+  console.log(' Trying to get token...');
+  console.log(' URL:', url);
+  console.log(' Client ID:', clientId);
+  console.log(' Client Secret:', clientSecret);
 
     if (!url || !clientId || !clientSecret) {
-      throw new Error(' Faltan variables en .env');
+  throw new Error(' Missing variables in .env');
     }
 
     const body = qs.stringify({
@@ -43,10 +43,10 @@ export class OAuthService {
         : 'default-fake-token';
 
       this.token = token;
-      console.log('🔐 Token generado:', token);
+  console.log('🔐 Token generated:', token);
       return token;
     } catch (error) {
-      console.error('❌ Error al llamar al endpoint OAuth:', error);
+  console.error('❌ Error calling OAuth endpoint:', error);
       throw new Error('OAuth2 Error');
     }
   }

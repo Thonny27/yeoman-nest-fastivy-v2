@@ -23,14 +23,14 @@ function generateRealControllersFromServices(servicesPath, controllersPath, serv
     const serviceContent = fs.readFileSync(servicePath, 'utf8');
 
 
-    // Extraer métodos públicos y sus parámetros, evitando duplicados por nombre
+  // Extract public methods and their parameters, avoiding duplicates by name
     const methodWithParamsRegex = /public ([a-zA-Z0-9_]+)\s*\(([^)]*)\)/g;
     let match;
     const methodMap = new Map();
     while ((match = methodWithParamsRegex.exec(serviceContent)) !== null) {
       const methodName = match[1];
       if (methodName !== 'constructor' && !methodMap.has(methodName)) {
-        // Extraer nombres de parámetros
+  // Extract parameter names
         const paramsRaw = match[2].trim();
         let paramNames = [];
         if (paramsRaw.length > 0) {
@@ -47,7 +47,7 @@ function generateRealControllersFromServices(servicesPath, controllersPath, serv
     let methodsCode = '';
     const reserved = new Set(['body', 'query', 'params', 'param', 'request', 'req', 'res', 'next']);
     for (const [name, paramNames] of methodMap.entries()) {
-      // Evitar parámetros duplicados con los decoradores estándar
+  // Avoid duplicate parameters with standard decorators
       const filteredParamNames = paramNames.filter(p => !reserved.has(p.toLowerCase()));
       const args = filteredParamNames.map(p => `${p}: any`).join(', ');
       const callArgs = paramNames.join(', ');

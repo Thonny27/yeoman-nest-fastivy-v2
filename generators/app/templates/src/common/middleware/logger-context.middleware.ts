@@ -8,7 +8,7 @@ export class LoggerContextMiddleware implements NestMiddleware {
     const requestId = randomUUID();
     (req as any).requestId = requestId;
 
-    console.log(`[${requestId}] ${req.method} ${req.url}`);
+  console.log(`[${requestId}] ${req.method} ${req.url}`); // Request log
     next();
   }
 }

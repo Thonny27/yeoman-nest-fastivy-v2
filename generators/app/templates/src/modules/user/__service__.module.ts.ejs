@@ -1,15 +1,39 @@
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { <%= serviceClass %>DbService } from './services/<%= service %>Db.service';
 import { RedisModule } from '../../common/redis/redis.module';
 import { <%= serviceClass %> } from '../../database/entities/<%= service %>.entity';
 import { HttpModule } from '@nestjs/axios';
+import { OAuthModule } from '../../common/oauth/oauth.module';
 import { HttpClientController } from './controllers/http-client.controller';
+import { RedisController } from './controllers/redis.controller';
+import { <%= serviceClass %>Controller } from './controllers/<%= service %>.controller';
+import { UserController } from './controllers/user.controller';
+import { StoreController } from './controllers/store.controller';
+import { OAuthController } from './controllers/oauth.controller';
+import { UserDbController } from './controllers/userDb.controller';
+import { <%= serviceClass %>Service } from './services/<%= service %>.service';
+import { UserService } from './services/user.service';
+import { StoreService } from './services/store.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([<%= serviceClass %>]), RedisModule, HttpModule],
-  controllers: [HttpClientController],
-  providers: [<%= serviceClass %>DbService],
+  imports: [
+    TypeOrmModule.forFeature([<%= serviceClass %>]),
+    RedisModule,
+    HttpModule,
+    OAuthModule,
+  ],
+  controllers: [
+    HttpClientController,
+    RedisController,
+    <%= serviceClass %>Controller,
+    UserController,
+    StoreController,
+    OAuthController,
+    UserDbController,
+  ],
+  providers: [<%= serviceClass %>DbService, <%= serviceClass %>Service, UserService, StoreService],
   exports: [<%= serviceClass %>DbService],
 })
 export class <%= serviceClass %>Module {}

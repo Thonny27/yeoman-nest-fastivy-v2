@@ -12,4 +12,4 @@ const sdk = new NodeSDK({
 
 sdk.start();
 
-console.log('✅ OpenTelemetry SDK initialized');
+console.log('✅ OpenTelemetry SDK initialized'); // OpenTelemetry log

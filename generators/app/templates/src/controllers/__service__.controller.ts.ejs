@@ -8,16 +8,16 @@ export class <%= serviceClass %>Controller {
 
   @Post()
   create(@Body() dto: <%= serviceClass %>Db) {
-    this.logger.log(`📥 Creando entidad: ${JSON.stringify(dto)}`);
+    this.logger.log(`📥 Creating entity: ${JSON.stringify(dto)}`);
     return {
-      message: 'Entidad creada correctamente ✅',
+      message: 'Entity created successfully ✅',
       data: dto,
     };
   }
 
   @Post('error')
   createError() {
-    this.logger.error('💥 Se va a lanzar un error a propósito');
-    throw new Error('Simulación de error interno');
+  this.logger.error('💥 An error will be thrown on purpose');
+  throw new Error('Internal error simulation');
   }
 }

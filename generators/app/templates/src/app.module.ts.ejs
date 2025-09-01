@@ -4,7 +4,6 @@ import configuration from './config/configuration';
 import { <%= serviceClass %>Module } from './modules/<%= service %>/<%= service %>.module';
 import { LoggerModule } from './common/logger/logger.module';
 import { OAuthModule } from './common/oauth/oauth.module';
-import { CircuitBreakerModule } from './common/circuit-breaker/circuit-breaker.module';
 import { DatabaseModule } from './database/database.module';
 import { RedisModule } from './common/redis/redis.module';
 
@@ -17,7 +16,6 @@ import { RedisModule } from './common/redis/redis.module';
     LoggerModule,
     OAuthModule,
     <%= serviceClass %>Module,
-    CircuitBreakerModule,
     DatabaseModule,
     RedisModule
   ],

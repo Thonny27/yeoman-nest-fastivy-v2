@@ -8,7 +8,7 @@ export class HttpClientController {
   constructor() {
     this.httpClient = new HttpClient();
   }
-  // Ejemplo de orquestación, composición y agregación
+  // Example of orchestration, composition, and aggregation
   @Get('rest')
   async orquestar(): Promise<ApiResponse> {
     const start = Date.now();
@@ -16,13 +16,13 @@ export class HttpClientController {
     const errors: Array<{ key?: string; message: string; detail?: any }> = [];
     let uuidRes, getRes, postResults;
     try {
-      // 1. Orquestación: primero obtener uuid
+      // 1. Orchestration: first get uuid
       uuidRes = await this.safeRequest({
         url: 'https://httpbin.org/uuid',
         method: 'get',
       });
       if (uuidRes.error) errors.push({ key: 'uuid', message: uuidRes.error });
-      // 2. Composición: usar uuid en el siguiente GET
+      // 2. Composition: use uuid in the next GET
       getRes = await this.safeRequest({
         url:
           'https://httpbin.org/get?uuid=' +
@@ -30,7 +30,7 @@ export class HttpClientController {
         method: 'get',
       });
       if (getRes.error) errors.push({ key: 'get', message: getRes.error });
-      // 3. Agregación: hacer dos POST en paralelo y agregar los resultados
+      // 3. Aggregation: make two POST requests in parallel and aggregate the results
       const postEndpoints = [
         {
           key: 'post1',
@@ -87,7 +87,7 @@ export class HttpClientController {
       };
     }
   }
-  // Endpoint POST para recibir requests customizadas
+  // POST endpoint to receive custom requests
   @Post('custom')
   async customOrchestration(@Body() body: CustomRequest): Promise<ApiResponse> {
     const start = Date.now();
@@ -103,12 +103,12 @@ export class HttpClientController {
         errors: [{ message: 'Invalid endpoints array' }],
       };
     }
-    // Performance: llamadas en paralelo
+    // Performance: parallel requests
     const results = await Promise.all(
       body.endpoints.map(async ({ url, method, data, key }) => {
         const res = await this.safeRequest({ url, method, data });
         if (res.error) errors.push({ key, message: res.error });
-        // Cocinar la data: solo exponer el json o data relevante
+        // Process the data: only expose relevant json or data
         return [key, res.data?.json ?? res.data ?? null];
       }),
     );
@@ -145,13 +145,13 @@ export class HttpClientController {
       return { data: null, error: e instanceof Error ? e.message : String(e) };
     }
   }
-  // Nuevo endpoint que usa configuración custom de circuit breaker con endpoint conocido de httpbin
+  // New endpoint that uses custom circuit breaker configuration with known httpbin endpoint
   @Get('custom-circuit')
   async getWithCustomCircuit(): Promise<ApiResponse> {
     const start = Date.now();
     const path = '/http-client/custom-circuit';
     const errors: Array<{ key?: string; message: string; detail?: any }> = [];
-    // Configuración custom de ejemplo para customizar circuit breaker
+    // Example custom configuration for customizing circuit breaker
     const customCircuitBreakerConfig = {
       timeout: 2000, // ms
       errorThresholdPercentage: 40,
@@ -160,7 +160,7 @@ export class HttpClientController {
       rollingCountBuckets: 10,
       volumeThreshold: 2,
     };
-    // Instanciar un nuevo HttpClient con la configuración custom
+    // Instantiate a new HttpClient with the custom configuration
     const customHttpClient = new HttpClient({
       circuitBreaker: customCircuitBreakerConfig,
     });

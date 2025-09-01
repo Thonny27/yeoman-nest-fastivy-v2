@@ -18,14 +18,14 @@ export class OAuthController {
     this.httpClient = new HttpClient();
   }
 
-  // 👉 GET simple para ver el token generado
+  // 👉 Simple GET to view the generated token
   @Get('token')
   async getToken() {
     const token = await this.oauthService.getAccessToken();
     return { access_token: token };
   }
 
-  // 👉 GET para consumir API externa con ese token
+  // 👉 GET to consume external API with that token
   @Get('test-api-call')
   async callExternalApi() {
     try {
@@ -38,24 +38,24 @@ export class OAuthController {
       });
 
       return {
-        message: 'API externa llamada con éxito ✅',
+  message: 'External API called successfully ✅',
         response: response.data,
       };
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error('❌ Error en API externa (GET):', error.message);
+  console.error('❌ Error in external API (GET):', error.message);
       } else {
-        console.error('❌ Error desconocido:', error);
+  console.error('❌ Unknown error:', error);
       }
 
       throw new HttpException(
-        'Error al llamar a API externa',
+  'Error calling external API',
         HttpStatus.BAD_GATEWAY,
       );
     }
   }
 
-  // 👉 POST para enviar datos autenticados con Bearer Token
+  // 👉 POST to send authenticated data with Bearer Token
   @Post('test-post-call')
   async callExternalPost(@Body() data: any) {
     try {
@@ -69,25 +69,25 @@ export class OAuthController {
       });
 
       return {
-        message: 'POST a API externa con token exitoso ✅',
+  message: 'POST to external API with token successful ✅',
         sent: data,
         response: response.data,
       };
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error('❌ Error en POST externo:', error.message);
+  console.error('❌ Error in external POST:', error.message);
       } else {
-        console.error('❌ Error desconocido:', error);
+  console.error('❌ Unknown error:', error);
       }
 
       throw new HttpException(
-        'Error al hacer POST externo',
+  'Error making external POST',
         HttpStatus.BAD_GATEWAY,
       );
     }
   }
 
-  // 👉 GET para consumir API externa usando HttpClient resiliente
+  // 👉 GET to consume external API using resilient HttpClient
   @Get('test-api-call-with-circuit')
   async callWithBreaker() {
     const token = await this.oauthService.getAccessToken();
@@ -100,14 +100,14 @@ export class OAuthController {
           },
         },
       );
-      // El HttpClient de la librería retorna { data } como en safeRequest
+  // The HttpClient from the library returns { data } as in safeRequest
       return {
-        message: 'Llamada con HttpClient resiliente ✅',
+  message: 'Call with resilient HttpClient ✅',
         response: response.data ?? response,
       };
     } catch (error) {
       return {
-        message: 'Error al llamar con HttpClient resiliente',
+  message: 'Error calling with resilient HttpClient',
         error: error instanceof Error ? error.message : String(error),
       };
     }
